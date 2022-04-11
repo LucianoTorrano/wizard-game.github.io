@@ -351,7 +351,7 @@ addEventListener('keydown',({ key })=>{
         case "w":
             console.log(jumpCount);
             if(jumpEnable && jumpCount <2){
-            player.velocity.y -=12;
+            player.velocity.y -=9.65;
             jumpCount ++;
             }
 
