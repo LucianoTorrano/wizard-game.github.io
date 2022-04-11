@@ -1,7 +1,3 @@
-const canvas = document.querySelector('canvas');
-const c  = canvas.getContext('2d');
-
-
 //images
 const landFloating = document.getElementById('land-floating');
 const landFloor = document.getElementById('land-floor');
@@ -20,6 +16,10 @@ const spriteWalkLeft = document.getElementById('walk-left');
 const spriteJumpRight = document.getElementById('jump-right');
 const spriteJumpLeft = document.getElementById('jump-left');
 
+
+const canvas = document.querySelector('canvas');
+const c  = canvas.getContext('2d');
+
 canvas.height = 576;
 canvas.width = 1024;
 
@@ -33,7 +33,8 @@ const aceleration = .7;
 //let dashSpeed = 0;
 const winingPoint = 46500;
 const cavePosition = 900;
-
+let jumpCount = 0;
+let jumpEnable = true;
 
 // player class
 class Player{
@@ -52,7 +53,7 @@ class Player{
             x:0,
             y:0
         }
-        this.speed = 10;
+        this.speed = 7;
         //this.dashEnable = true;
         this.image = spriteStandRight;
         this.frames = 0;
@@ -146,7 +147,7 @@ const keys = {
     },
     left:{
         pressed: false,
-    },
+    }
 }
 let lastKey
 
@@ -175,6 +176,8 @@ function init(){
 
     scrollOffset = 0;
     //dashSpeed = 0;
+    jumpCount = 0;
+    jumpEnable = true;
 }
 
 
@@ -235,7 +238,7 @@ function animate(){
                 }else object.position.x += player.speed * .66;
                 })
         }}
-        if(player.position.y < -200){
+        if(player.position.y < - 400){
             init();
         }
 
@@ -246,6 +249,7 @@ function animate(){
                 && player.position.x + player.width >= platform.position.x
                 && player.position.x <= platform.position.x + platform.width){
                 player.velocity.y = 0;
+                jumpCount = 0;
             }
         })
 
@@ -345,7 +349,12 @@ addEventListener('keydown',({ key })=>{
             lastKey = 'right';
             break
         case "w":
-            player.velocity.y -=15;
+            console.log(jumpCount);
+            if(jumpEnable && jumpCount <2){
+            player.velocity.y -=12;
+            jumpCount ++;
+            }
+
             if(player.currentSprite === player.sprites.stand.right
                 || player.currentSprite === player.sprites.walk.right){
                     player.currentSprite = player.sprites.jump.right;
@@ -368,6 +377,15 @@ addEventListener('keyup',({key})=>{
             keys.right.pressed = false;
             break
         case 'w':
+            if(jumpCount >=2){
+                jumpEnable = false;
+                jumpCount=0;
+            }
+            if(!jumpEnable){
+                setTimeout(()=>{
+                    jumpEnable = true;
+                },500);
+            }
             player.velocity.y += 0;
             if(player.currentSprite === player.sprites.jump.left){
                 player.currentSprite = player.sprites.stand.left;
