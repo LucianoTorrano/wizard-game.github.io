@@ -25,8 +25,8 @@ canvas.width = 1024;
 
 
 //  Variables
-const gravity = .7;
-const dashTimer = 500;
+const gravity = .65;
+//const dashTimer = 500;
 const leftCorner = 100;
 const rightCorner = 400;
 const aceleration = .7;
@@ -35,7 +35,8 @@ const winingPoint = 46500;
 const cavePosition = 900;
 let jumpCount = 0;
 let jumpEnable = true;
-
+const jumpPower = 9.8;
+const playerSpeed = 7
 // player class
 class Player{
     constructor(){
@@ -53,7 +54,7 @@ class Player{
             x:0,
             y:0
         }
-        this.speed = 7;
+        this.speed = playerSpeed;
         //this.dashEnable = true;
         this.image = spriteStandRight;
         this.frames = 0;
@@ -106,7 +107,7 @@ class Player{
 
 // platform class
 class Platform{
-    constructor({x,y,image}){
+    constructor({x,y,image,hasMovement = false,direction=undefined,speed=0,range=0}){
         this.position = {
             x,
             y
@@ -114,10 +115,32 @@ class Platform{
         this.image = image;
         this.width = image.width;
         this.height = image.height;
+        this.hasMovement =  hasMovement;
+        this.movement = {
+            x:null,
+            y:null,
+            direction,
+            speed,
+            range
+        }
+        this.initRange = range
     }
     draw(){
         c.drawImage(this.image,this.position.x,this.position.y)
     }
+    update(){
+        const axis = this.movement.direction;
+        if(axis == 'y'){
+             this.position.y += this.movement.speed;
+        }else if(axis === 'x'){
+            this.position.x +=this.movement.speed
+        }
+        this.movement.range -= this.movement.speed;
+        if(this.movement.range <= 0 || Math.abs(this.movement.range) >= this.initRange){
+            this.movement.speed *= -1;
+        }
+    }
+
 }
 
 // Generic Scene object class
@@ -162,8 +185,8 @@ function init(){
                         new Platform({x:landFloor.width,y:floorPositionY,image:landFloor}),
                         new Platform({x:landFloor.width*2.5,y:floorPositionY,image:landFloor}),
                         new Platform({x:landFloor.width*3.5,y:floorPositionY,image:landFloor}),
-                        new Platform({x:landFloor.width*4.8,y:150,image:brickPlatform}),
-                        new Platform({x:landFloor.width*5.7,y:200,image:brickPlatform}),
+                        new Platform({x:landFloor.width*4.8,y:150,image:brickPlatform,hasMovement:true,direction:'y',speed:0.5,range:120}),
+                        new Platform({x:landFloor.width*5.7,y:250,image:brickPlatform,hasMovement:true,direction:'y',speed:0.6,range:120}),
                         new Platform({x:landFloor.width*6.3,y:floorPositionY,image:landFloor}),
                         new Platform({x:landFloor.width*7.3,y:floorPositionY,image:landFloor}),
                         new Platform({x:landFloor.width*8.3 -cave.width*1.5,y:floorPositionY-cave.height+18,image:cave})];
@@ -191,6 +214,9 @@ function animate(){
     })
     platforms.forEach(platform =>{
         platform.draw();
+        if(platform.hasMovement){
+            platform.update();
+        }
     })
     const cloudObject = sceneObjects[5];
     cloudObject.position.x -=1;
@@ -244,12 +270,15 @@ function animate(){
 
         //platform colision 
         platforms.forEach(platform =>{
-            if(player.position.y + player.height <= platform.position.y+5
-                && player.position.y + player.height + player.velocity.y >= platform.position.y +5
+            if(player.position.y + player.height <= platform.position.y+10
+                && player.position.y + player.height + player.velocity.y >= platform.position.y+5
                 && player.position.x + player.width >= platform.position.x
                 && player.position.x <= platform.position.x + platform.width){
                 player.velocity.y = 0;
                 jumpCount = 0;
+                if(platform.hasMovement){
+                    player.velocity.y += platform.movement.speed;
+               }
             }
         })
 
@@ -330,11 +359,13 @@ function animate(){
         init();
     }
 }
-init();
-animate();
 
 // eventListeners
 
+addEventListener('DOMContentLoaded',()=>{
+    init();
+    animate();
+})
 
 addEventListener('keydown',({ key })=>{
     switch(key){
@@ -349,9 +380,8 @@ addEventListener('keydown',({ key })=>{
             lastKey = 'right';
             break
         case "w":
-            console.log(jumpCount);
             if(jumpEnable && jumpCount <2){
-            player.velocity.y -=12;
+            player.velocity.y -=jumpPower;//9.65 salto muy dificil a ladrillos (sin movimientos)
             jumpCount ++;
             }
 
