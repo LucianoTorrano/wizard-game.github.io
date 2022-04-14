@@ -160,7 +160,6 @@ class SceneObject{
 }
 
 // implementation
-const floorPositionY = canvas.height-landFloor.height;
 let player = new Player();
 let platforms =   [];
 let sceneObjects=[];
@@ -176,6 +175,7 @@ let lastKey
 
 //reset values
 function init(){
+    const floorPositionY = canvas.height-landFloor.height;
     player = new Player();
     platforms =   [new Platform({x:400,y:300,image:landFloating}),
                         new Platform({x:700,y:200,image:landFloating}),
