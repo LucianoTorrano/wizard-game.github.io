@@ -8,14 +8,16 @@ const sun = document.getElementById('sun');
 const landPlatform = document.getElementById('land-platform');
 const cave = document.getElementById('cave');
 const brickPlatform= document.getElementById('brick-platform');
-//sprite
+//player sprite
 const spriteStandRight = document.getElementById('stand-right');
 const spriteStandLeft = document.getElementById('stand-left');
 const spriteWalkRight =document.getElementById('walk-right');
 const spriteWalkLeft = document.getElementById('walk-left');
 const spriteJumpRight = document.getElementById('jump-right');
 const spriteJumpLeft = document.getElementById('jump-left');
-
+//enemy sprite
+const enemyGreen = document.getElementById('enemy-green');
+const enemyOrange = document.getElementById('enemy-orange');
 
 const canvas = document.querySelector('canvas');
 const c  = canvas.getContext('2d');
@@ -105,6 +107,43 @@ class Player{
     }
 }
 
+//enemy class
+class Enemy{
+    constructor({x,y,speed,image,maxframes,range}){
+        this.position = {
+            x:x,
+            y:y
+        }
+        this.speed = speed;
+        this.sprite = image;
+        this.spriteHeight = image.height;
+        this.spriteWidth = image.width/maxframes;
+        this.maxframes = maxframes;
+        this.frameCount = 0;
+        this.initRange = range;
+        this.actualRange = range;
+    }
+    draw(){
+        c.drawImage(this.sprite,
+                    this.spriteWidth * this.frameCount,
+                    0,
+                    this.spriteWidth,
+                    this.spriteHeight,
+                    this.position.x,
+                    this.position.y,
+                    this.spriteWidth,
+                    this.spriteHeight)
+    }
+    update(){
+        this.frameCount ++;
+        if(this.frameCount >= this.maxframes) this.frameCount = 0;
+        this.position.x += this.speed;
+        this.actualRange -=this.speed;
+        if(this.actualRange < 0 || this.actualRange>this.initRange) this.speed *= -1;
+        this.draw();
+    }
+}
+
 // platform class
 class Platform{
     constructor({x,y,image,hasMovement = false,direction=undefined,speed=0,range=0}){
@@ -162,6 +201,7 @@ class SceneObject{
 // implementation
 let player = new Player();
 let platforms =   [];
+let enemies = [];
 let sceneObjects=[];
 const keys = {
     right:{
@@ -177,6 +217,12 @@ let lastKey
 function init(){
     const floorPositionY = canvas.height-landFloor.height;
     player = new Player();
+    enemies =   [new Enemy({x:400,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
+                new Enemy({x:600,y:floorPositionY-20,speed:.5,image:enemyGreen,maxframes:12,range:120}),
+                new Enemy({x:landFloor.width*3.5,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
+                new Enemy({x:2100,y:230-20,speed:2,image:enemyGreen,maxframes:12,range:140}),
+                new Enemy({x:landFloor.width*7.3,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
+                new Enemy({x:landFloor.width*6.3,y:floorPositionY-25,speed:3.5,image:enemyOrange,maxframes:28,range:220})];
     platforms =   [new Platform({x:400,y:300,image:landFloating}),
                         new Platform({x:700,y:200,image:landFloating}),
                         new Platform({x:2100,y:230,image:landFloating}),
@@ -225,6 +271,9 @@ function animate(){
         cloudObject.position.y +=( Math.random()-0.5) * 100
     }
     player.update();
+    enemies.forEach(enemy =>{
+        enemy.update();
+    })
 
         if((keys.right.pressed && player.position.x < rightCorner
             ||(keys.right.pressed && scrollOffset >=winingPoint && player.position.x < cavePosition))){
@@ -251,17 +300,24 @@ function animate(){
                         object.position.x -= player.speed * .28;
                 } else object.position.x -=player.speed * .66;
                 })
+                enemies.forEach(enemy=>{
+                    enemy.position.x -=player.speed;
+                })
+
             }else if(keys.left.pressed && scrollOffset > 0){
                 platforms.forEach(platform =>{
                     scrollOffset -= player.speed;
                     platform.position.x += player.speed;
-            })
+                })
                 sceneObjects.forEach(object=>{
                     if(object.image === sun){
                         object.position.x += player.speed * .18;
                     }else if(object === sceneObjects[2] || object === sceneObjects[3]){
                         object.position.x += player.speed *.28;
                 }else object.position.x += player.speed * .66;
+                });
+                enemies.forEach(enemy=>{
+                    enemy.position.x +=player.speed;
                 })
         }}
         if(player.position.y < - 400){
@@ -358,6 +414,13 @@ function animate(){
     if(player.position.y > canvas.height + player.height){
         init();
     }
+    enemies.forEach(enemy =>{
+        if(player.position.x >= enemy.position.x -15 && player.position.x <= enemy.position.x+enemy.spriteWidth
+            && player.position.y-15<= enemy.position.y&& player.position.y >= enemy.position.y-25){
+            init();
+        }
+    })
+
 }
 
 // eventListeners
