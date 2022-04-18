@@ -242,7 +242,7 @@ function init(){
                 new Enemy({x:landFloor.width*3.5,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
                 new Enemy({x:2100,y:230-20,speed:2,image:enemyGreen,maxframes:12,range:140}),
                 new Enemy({x:landFloor.width*7.3,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
-                new Enemy({x:landFloor.width*6.3,y:floorPositionY-25,speed:3.5,image:enemyOrange,maxframes:28,range:220,jumpPower:12})];
+                new Enemy({x:landFloor.width*6.3,y:floorPositionY-25,speed:3.5,image:enemyOrange,maxframes:28,range:220,jumpPower:15})];
     platforms =   [new Platform({x:400,y:300,image:landFloating}),
                         new Platform({x:700,y:200,image:landFloating}),
                         new Platform({x:2100,y:230,image:landFloating}),
@@ -295,7 +295,7 @@ function animate(){
         enemy.update();
         if(enemy.sprite === enemyGreen)enemy.jumpPlayerInteraction(90,player)
         else if(enemy.sprite === enemyOrange) {
-            enemy.jumpPlayerInteraction(140,player)
+            enemy.jumpPlayerInteraction(110,player)
         };
     })
 
