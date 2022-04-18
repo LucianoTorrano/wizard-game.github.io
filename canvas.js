@@ -39,6 +39,9 @@ let jumpCount = 0;
 let jumpEnable = true;
 const jumpPower = 9.8;
 const playerSpeed = 7
+let enemyJumpPower;
+const floorPositionY = canvas.height-landFloor.height;
+
 // player class
 class Player{
     constructor(){
@@ -109,8 +112,12 @@ class Player{
 
 //enemy class
 class Enemy{
-    constructor({x,y,speed,image,maxframes,range}){
+    constructor({x,y,speed,image,maxframes,range,jumpPower=8,jumpRange = 90}){
         this.position = {
+            x:x,
+            y:y
+        };
+        this.initPosition = {
             x:x,
             y:y
         }
@@ -122,6 +129,8 @@ class Enemy{
         this.frameCount = 0;
         this.initRange = range;
         this.actualRange = range;
+        this.jumpPower = jumpPower;
+        this.jumpRange = jumpRange;
     }
     draw(){
         c.drawImage(this.sprite,
@@ -141,6 +150,18 @@ class Enemy{
         this.actualRange -=this.speed;
         if(this.actualRange < 0 || this.actualRange>this.initRange) this.speed *= -1;
         this.draw();
+    }
+    jumpPlayerInteraction(range,player){
+        let distance = Math.abs(player.position.x - this.position.x);
+        if(distance < 100){
+            this.position.y -= this.jumpPower;
+            this.jumpRange -= this.jumpPower;
+            if(this.jumpRange <= 0 ||this.jumpRange>range || this.position.y>=floorPositionY - 20){ 
+                this.jumpPower*=-1;
+            };
+        }else {
+            this.position.y = this.initPosition.y
+            this.jumpRange = range};
     }
 }
 
@@ -215,14 +236,13 @@ let lastKey
 
 //reset values
 function init(){
-    const floorPositionY = canvas.height-landFloor.height;
     player = new Player();
     enemies =   [new Enemy({x:400,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
                 new Enemy({x:600,y:floorPositionY-20,speed:.5,image:enemyGreen,maxframes:12,range:120}),
                 new Enemy({x:landFloor.width*3.5,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
                 new Enemy({x:2100,y:230-20,speed:2,image:enemyGreen,maxframes:12,range:140}),
                 new Enemy({x:landFloor.width*7.3,y:floorPositionY-20,speed:1,image:enemyGreen,maxframes:12,range:120}),
-                new Enemy({x:landFloor.width*6.3,y:floorPositionY-25,speed:3.5,image:enemyOrange,maxframes:28,range:220})];
+                new Enemy({x:landFloor.width*6.3,y:floorPositionY-25,speed:3.5,image:enemyOrange,maxframes:28,range:220,jumpPower:12})];
     platforms =   [new Platform({x:400,y:300,image:landFloating}),
                         new Platform({x:700,y:200,image:landFloating}),
                         new Platform({x:2100,y:230,image:landFloating}),
@@ -273,6 +293,10 @@ function animate(){
     player.update();
     enemies.forEach(enemy =>{
         enemy.update();
+        if(enemy.sprite === enemyGreen)enemy.jumpPlayerInteraction(90,player)
+        else if(enemy.sprite === enemyOrange) {
+            enemy.jumpPlayerInteraction(140,player)
+        };
     })
 
         if((keys.right.pressed && player.position.x < rightCorner
@@ -323,7 +347,6 @@ function animate(){
         if(player.position.y < - 400){
             init();
         }
-
         //platform colision 
         platforms.forEach(platform =>{
             if(player.position.y + player.height <= platform.position.y+10
@@ -488,3 +511,7 @@ addEventListener('keyup',({key})=>{
             break
     }
 })
+
+function distanceBetween(playerPosition, enemyPosition) {
+    return Math.abs(playerPosition - enemyPosition);
+}
