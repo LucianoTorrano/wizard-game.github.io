@@ -448,10 +448,14 @@ function animate(){
 
 // eventListeners
 
-addEventListener('DOMContentLoaded',()=>{
+window.onload = ()=>{
     init();
     animate();
-})
+}
+// addEventListener('DOMContentLoaded',()=>{
+//     init();
+//     animate();
+// })
 
 addEventListener('keydown',({ key })=>{
     switch(key){
