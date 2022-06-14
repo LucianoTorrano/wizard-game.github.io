@@ -1,4 +1,5 @@
-//images
+window.addEventListener('load',()=>{
+    //images
 const landFloating = document.getElementById('land-floating');
 const landFloor = document.getElementById('land-floor');
 const sky = document.getElementById('sky');
@@ -446,12 +447,11 @@ function animate(){
 
 }
 
+init();
+animate();
 // eventListeners
 
-window.onload = ()=>{
-    init();
-    animate();
-}
+
 // addEventListener('DOMContentLoaded',()=>{
 //     init();
 //     animate();
@@ -519,3 +519,5 @@ addEventListener('keyup',({key})=>{
 function distanceBetween(playerPosition, enemyPosition) {
     return Math.abs(playerPosition - enemyPosition);
 }
+
+})
