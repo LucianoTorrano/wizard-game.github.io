@@ -1,5 +1,5 @@
 window.addEventListener('load',()=>{
-    //images
+//images
 const landFloating = document.getElementById('land-floating');
 const landFloor = document.getElementById('land-floor');
 const sky = document.getElementById('sky');
@@ -34,7 +34,7 @@ const leftCorner = 100;
 const rightCorner = 400;
 const aceleration = .7;
 //let dashSpeed = 0;
-const winingPoint = 46500;
+const winningPoint = 46500;
 const cavePosition = 900;
 let jumpCount = 0;
 let jumpEnable = true;
@@ -301,7 +301,7 @@ function animate(){
     })
 
         if((keys.right.pressed && player.position.x < rightCorner
-            ||(keys.right.pressed && scrollOffset >=winingPoint && player.position.x < cavePosition))){
+            ||(keys.right.pressed && scrollOffset >=winningPoint && player.position.x < cavePosition))){
             player.velocity.x = player.speed;
             player.direction.right = true;
             player.direction.left = false;
@@ -313,7 +313,7 @@ function animate(){
             player.direction.left = true;
         }else{
             player.velocity.x = 0;
-            if(keys.right.pressed && scrollOffset<winingPoint){
+            if(keys.right.pressed && scrollOffset<winningPoint){
                 platforms.forEach(platform =>{
                     scrollOffset += player.speed;
                     platform.position.x -= player.speed;
@@ -430,8 +430,14 @@ function animate(){
         });
     */
     //win condition
-    if(scrollOffset > winingPoint){
-        console.log('you win');
+    const winningMsg = document.getElementById('winning-window');
+    const playAgainButton = document.getElementById('play-again-button');
+    if(scrollOffset > winningPoint){
+        winningMsg.style.display = 'block';
+        playAgainButton.onclick = ()=>{
+            winningMsg.style.display = 'none';
+            init();
+        }
     }
 
     //lose condition
@@ -450,12 +456,6 @@ function animate(){
 init();
 animate();
 // eventListeners
-
-
-// addEventListener('DOMContentLoaded',()=>{
-//     init();
-//     animate();
-// })
 
 addEventListener('keydown',({ key })=>{
     switch(key){
@@ -519,5 +519,14 @@ addEventListener('keyup',({key})=>{
 function distanceBetween(playerPosition, enemyPosition) {
     return Math.abs(playerPosition - enemyPosition);
 }
+
+//controls window button
+const controlsWindow = document.getElementById('controls-window');
+const closeWindowButton = document.getElementById('close-button');
+
+closeWindowButton.onclick = ()=>{
+    controlsWindow.style.display = 'none';
+}
+
 
 })

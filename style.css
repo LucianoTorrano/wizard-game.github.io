@@ -3,13 +3,56 @@
     padding: 0;
     box-sizing: border-box;
 }
-img{
-    display: none;
-}
 body{
     height: 100vh;
     display: flex;
+    flex-direction: column;
+    gap: 3em;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background: url('img/background.jpg');
+    background-position: center;
+    background-size: cover;
+}
+.canvas-asset{
+    display: none;
+}
+.canvas-container{
+    position: relative;
+}
+#canvas-game{
+    box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+-webkit-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+-moz-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+}
+.control-window-container,.winning-window-container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.winning-window-container{
+    display: none;
+}
+.control-window-container,.winning-window-container{
+    position: absolute;
+}
+#close-button, #play-again-button{
+    position: absolute;
+    right: .5em;
+    top: .5em;
+    cursor: pointer;
+}
+#play-again-button{
+    top: 55%;
+    right: 50%;
+    transform: translateX(50%);
+}
+#close-button:hover{
+    transform: scale(1.1);
+    transition: .3s;
+}
+#play-again-button:hover{
+    box-shadow: 0 0 13px 5px rgba(96, 53, 26, 0.75);
+    transition: .3s;
 }

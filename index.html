@@ -6,26 +6,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The trip of the Wizard</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/icon.svg">
     <script defer src="canvas.js"></script>
 </head>
 <body>
-    <img src="img/land-floating.png" id="land-floating">
-    <img src="img/land.png" id="land-floor">
-    <img src="img/sky-bg.png" id="sky">
-    <img src="img/land-bg.png" id="landBg">
-    <img src="img/clouds.png" id="cloud">
-    <img src="img/Sun.png" id="sun">
-    <img src="img/land-platform.png" id="land-platform">
-    <img src="img/cave.png" id="cave">
-    <img src="img/brick-platform.png" id="brick-platform">
-    <img src="img/standRight.svg" id="stand-right">
-    <img src="img/standLeft.svg" id="stand-left">
-    <img src="img/walkingRight.svg" id="walk-right">
-    <img src="img/walkingLeft.svg" id="walk-left">
-    <img src="img/jumpLeft.svg" id="jump-left">
-    <img src="img/jumpRight.svg" id="jump-right">
-    <img src="img/greenSlimeMovement.svg" id="enemy-green">
-    <img src="img/orangeSlimeMovement.svg" id="enemy-orange">
-    <canvas></canvas>
+    <img class="canvas-asset" src="img/land-floating.png" id="land-floating">
+    <img class="canvas-asset" src="img/land.png" id="land-floor">
+    <img class="canvas-asset" src="img/sky-bg.png" id="sky">
+    <img class="canvas-asset" src="img/land-bg.png" id="landBg">
+    <img class="canvas-asset" src="img/clouds.png" id="cloud">
+    <img class="canvas-asset" src="img/Sun.png" id="sun">
+    <img class="canvas-asset" src="img/land-platform.png" id="land-platform">
+    <img class="canvas-asset" src="img/cave.png" id="cave">
+    <img class="canvas-asset" src="img/brick-platform.png" id="brick-platform">
+    <img class="canvas-asset" src="img/standRight.svg" id="stand-right">
+    <img class="canvas-asset" src="img/standLeft.svg" id="stand-left">
+    <img class="canvas-asset" src="img/walkingRight.svg" id="walk-right">
+    <img class="canvas-asset" src="img/walkingLeft.svg" id="walk-left">
+    <img class="canvas-asset" src="img/jumpLeft.svg" id="jump-left">
+    <img class="canvas-asset" src="img/jumpRight.svg" id="jump-right">
+    <img class="canvas-asset" src="img/greenSlimeMovement.svg" id="enemy-green">
+    <img class="canvas-asset" src="img/orangeSlimeMovement.svg" id="enemy-orange">
+    <img src="img/title.svg" alt="title" class="game-title">
+    <div class="canvas-container">
+        <div class="control-window-wrapper">
+            <div class="control-window-container" id="controls-window">
+                <img id="close-button" src="img/close-window.svg" alt="close">
+                <img class="control-window" src="img/control-window.svg" alt="controls">    
+            </div>
+        </div>
+       <div class="winning-window-wrapper">
+            <div class="winning-window-container" id="winning-window">
+                <img id="play-again-button" src="img/play-again-button.svg" alt="Play again">
+                <img class="winning-window" src="img/winning-window.svg" alt="Winning window">    
+            </div>
+        </div>
+        <canvas id="canvas-game"></canvas>
+    </div>
 </body>
 </html>
