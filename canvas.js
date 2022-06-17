@@ -523,6 +523,10 @@ function distanceBetween(playerPosition, enemyPosition) {
 //controls window button
 const controlsWindow = document.getElementById('controls-window');
 const closeWindowButton = document.getElementById('close-button');
+const gameTitle = document.getElementById('game-title');
+
+gameTitle.style.display = 'block'
+controlsWindow.style.display = 'block';
 
 closeWindowButton.onclick = ()=>{
     controlsWindow.style.display = 'none';
