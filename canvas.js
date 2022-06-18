@@ -520,17 +520,33 @@ function distanceBetween(playerPosition, enemyPosition) {
     return Math.abs(playerPosition - enemyPosition);
 }
 
+
+/* GAME FIRST STAGES OPTIONS */
+
 //controls window button
 const controlsWindow = document.getElementById('controls-window');
 const closeWindowButton = document.getElementById('close-button');
 const gameTitle = document.getElementById('game-title');
+const playGameWindow = document.getElementById('play-game-window');
+const playGameButton = document.getElementById('play-game-button');
 
+playGameWindow.style.display = 'block';
 gameTitle.style.display = 'block'
-controlsWindow.style.display = 'block';
 
-closeWindowButton.onclick = ()=>{
-    controlsWindow.style.display = 'none';
+playGameButton.onclick = ()=>{
+    playGameWindow.style.transform = 'scale(0)';
+    canvas.style.transform = 'scale(1)';
+    canvas.style.opacity = '1';
+
+    setTimeout(() => {
+        controlsWindow.style.display = 'block';
+        controlsWindow.style.opacity = '1';    
+    }, 2000);
+
+    closeWindowButton.onclick = ()=>{
+        controlsWindow.style.display = 'none';
+    }
+    
 }
-
 
 })

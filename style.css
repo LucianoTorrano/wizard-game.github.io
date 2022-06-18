@@ -7,7 +7,6 @@ body{
     height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 3em;
     align-items: center;
     justify-content: center;
     background: url('img/background.jpg');
@@ -25,35 +24,45 @@ body{
 }
 #canvas-game{
     box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
--webkit-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
--moz-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+    -moz-box-shadow: 0 10px 131px 24px rgba(255, 255, 255, 0.75);
+    opacity: 0;
+    transform: scale(0);
+    transition: 2s;
 }
-.control-window-container,.winning-window-container{
+.control-window-container{
+    opacity: 0;
+    transform: scale(.5);
+    transition: 1s;
+}
+.control-window-container,.winning-window-container,.play-game-container{
     display: none;
     position: absolute;
+    z-index: 10;
+    transition: 1s;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
 }
-.control-window-container,.winning-window-container{
-    position: absolute;
-}
-#close-button, #play-again-button{
+#close-button, #play-again-button,#play-game-button{
     position: absolute;
     right: .5em;
     top: .5em;
     cursor: pointer;
 }
-#play-again-button{
+#play-again-button,#play-game-button{
     top: 55%;
     right: 50%;
     transform: translateX(50%);
+}
+#play-game-button{
+    top: 40%;    
 }
 #close-button:hover{
     transform: scale(1.1);
     transition: .3s;
 }
-#play-again-button:hover{
+#play-again-button:hover,#play-game-button:hover{
     box-shadow: 0 0 13px 5px rgba(96, 53, 26, 0.75);
     transition: .3s;
 }
