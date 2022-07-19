@@ -65,7 +65,10 @@ body{
 }
 
 @media all and (max-width: 1440px){
-    .control-window-container,.winning-window-container,.play-game-container{
+    .control-window-container,.winning-window-container{
+        transform: scale(.75) translate(-72.5%,-75%);
+    }
+    .play-game-container{
         transform: scale(.6) translate(-82.5%,-85%);
     }
 }
